@@ -7,6 +7,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/", require("./routes/routes"));
+const path = require('path');
 
 // if (process.env.NODE_ENV === "production") {
 //   console.log("In production stage");
