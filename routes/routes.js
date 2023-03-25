@@ -1,43 +1,26 @@
-// const { utilityProcess } = require("electron");
 const express = require("express");
-const { Transactions } = require("../models/db");
+const { getDetails, loginUser, registerUser, updateDetails } = require("../controller/loginRoute");
+const {
+  getTransaction,
+  postTransaction,
+  deleteTransaction,
+} = require("../controller/transactionRoute");
+const Auth = require("../middleware/Auth");
+
 const router = express();
 
-router.get("/api/transactions", async (req, res) => {
-  try {
-    const data = await Transactions.find();
+router.get("/api/:id", getDetails);
 
-    res.json(data);
-  } catch (error) {
-    res.send(error);
-  }
-});
+router.post("/api/login", loginUser);
 
-router.post("/api/transactions", async (req, res) => {
-  try {
-    const data = await new Transactions(req.body);
-    const saveddata = await data.save();
-    res.json(saveddata);
-  } catch (error) {
-    res.send(error);
-  }
-});
+router.post("/api/register", registerUser);
 
-router.delete("/api/transactions/:id", async (req, res) => {
-  try {
-    const deletedata = await Transactions.findById(req.params.id);
-    // console.log(deletedata);
+router.put("/api/update", Auth, updateDetails);
 
-    if (!deletedata) {
-      return res.send("Not Found");
-    }
+router.get("/api/v1/transactions", Auth, getTransaction);
 
-    const deldata = await Transactions.findByIdAndDelete(req.params.id);
-    res.send("Success");
-  } catch (error) {
-    console.log(error);
-  }
-});
+router.post("/api/transactions", Auth, postTransaction);
 
+router.delete("/api/transactions/:id", Auth, deleteTransaction);
 
 module.exports = router;
