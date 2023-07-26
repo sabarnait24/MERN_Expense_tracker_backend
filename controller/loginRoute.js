@@ -4,19 +4,19 @@ var jwt = require("jsonwebtoken");
 const { User } = require("../models/loginModel");
 const secret = "shb@mk15fg!hf8&&7";
 
-const getDetails = async (req, res) => {
-  const id = req.params.id;
-  try {
-    const data = await User.findById(id);
-    const { password, cpassword, firstname, ...rest } = Object.assign(
-      {},
-      data.toJSON()
-    );
-    return res.status(200).send(rest);
-  } catch (error) {
-    res.status(500).send({ msg: "not found" });
-  }
-};
+// const getDetails = async (req, res) => {
+//   const id = req.params.id;
+//   try {
+//     const data = await User.findById(id);
+//     const { password, cpassword, firstname, ...rest } = Object.assign(
+//       {},
+//       data.toJSON()
+//     );
+//     return res.status(200).send(rest);
+//   } catch (error) {
+//     res.status(500).send({ msg: "not found" });
+//   }
+// };
 
 const loginUser = async (req, res) => {
   try {
@@ -55,16 +55,16 @@ const registerUser = async (req, res) => {
       return res.status(200).send("user already exists");
     }
     const password = req.body.password;
-    const cpassword = req.body.cpassword;
-    if (password !== cpassword) {
-      return res.status(401).send("Passwords are not matching");
-    }
+    // const cpassword = req.body.cpassword;
+    // if (password !== cpassword) {
+    //   return res.status(401).send("Passwords are not matching");
+    // }
     const newPassword = await bcrypt.hash(password, saltRounds);
     const data = new User({
       firstname: req.body.firstname,
       email: req.body.email,
       password: newPassword,
-      cpassword: newPassword,
+      // cpassword: newPassword,
     });
 
     const savedata = await data.save();
@@ -80,15 +80,15 @@ const updateDetails = async (req, res) => {
     const id = req.userId;
 
     if (id) {
-      const { email, password, cpassword } = req.body;
-      if (password !== cpassword) {
-        return res.status(201).send({ msg: "password not matching" });
-      }
+      const { email, password} = req.body;
+      // if (password !== cpassword) {
+      //   return res.status(201).send({ msg: "password not matching" });
+      // }
       const updatepassword = await bcrypt.hash(password, saltRounds);
       const newData = {
         email,
         password: updatepassword,
-        cpassword: updatepassword,
+        // cpassword: updatepassword,
       };
       const newBody = await User.findByIdAndUpdate(id, newData, { new: true });
 
@@ -102,7 +102,7 @@ const updateDetails = async (req, res) => {
 };
 
 module.exports = {
-  getDetails,
+  // getDetails,
   loginUser,
   registerUser,
   updateDetails,

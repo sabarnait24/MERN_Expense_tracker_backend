@@ -1,5 +1,5 @@
 const express = require("express");
-const { getDetails, loginUser, registerUser, updateDetails } = require("../controller/loginRoute");
+const {  loginUser, registerUser, updateDetails } = require("../controller/loginRoute");
 const {
   getTransaction,
   postTransaction,
@@ -9,7 +9,7 @@ const Auth = require("../middleware/Auth");
 
 const router = express();
 
-router.get("/api/:id", getDetails);
+// router.get("/api/:id", getDetails);
 
 router.post("/api/login", loginUser);
 
